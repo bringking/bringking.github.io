@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Blogging | Coding in the basement]]></title>
+  <link href="http://charlesbking.com/blog/categories/blogging/atom.xml" rel="self"/>
+  <link href="http://charlesbking.com/"/>
+  <updated>2014-03-09T21:51:52-07:00</updated>
+  <id>http://charlesbking.com/</id>
+  <author>
+    <name><![CDATA[Charles King]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Comeback]]></title>
+    <link href="http://charlesbking.com/blog/2013/12/15/comeback/"/>
+    <updated>2013-12-15T23:25:17-07:00</updated>
+    <id>http://charlesbking.com/blog/2013/12/15/comeback</id>
+    <content type="html"><![CDATA[<p>Wow, haven&rsquo;t posted on here in over a year. Well a lot has happened since then, so I thought I would update this post
+to reflect some of the changes that I have been through. First off, I changed the stylesheets around significantly, to match the
+style I am leaning towards now. Minimal, light and dark, only color where appropriate, etc. I am not done yet, so look
+out for more changes. Professionally,  I jumped from doing app development on the side to full-time web-developer. Yayy!
+It has been a tough year of fast paced development, but I think I am a better coder for it. So keeping that in mind,
+some of my new post ideas will involve the things I am excited about now. Mainly <a href="http://www.knockoutjs.com">KnockoutJS</a>,
+<a href="http://angularjs.org/">AngularJS</a>, NodeJS, and CoffeeScript (to name a few). I have some cool stuff to share so I hope you
+enjoy.</p>
+]]></content>
+  </entry>
+  
+</feed>

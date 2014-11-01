@@ -1,0 +1,745 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Paginated view on WP7 - Coding in the basement</title>
+	<meta name="author" content="Charles King">
+
+	
+	<meta name="description" content="What I wanted to detail in these upcoming posts was how I implemented a paginated view for the &ldquo;card deck&rdquo; on each platform. To sum it up &hellip;">
+	
+
+	<link href="/atom.xml" rel="alternate" title="Coding in the basement" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Coding in the basement</a></h1>
+<nav class="menu"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+	<li><a href="/me">Me</a></li>
+</ul>
+</nav>
+
+<div class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/112523142119059401568" title="Google+">Google+</a>
+		
+		
+		<a class="twitter" href="http://twitter.com/thebringking" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/bringking" title="GitHub">GitHub</a>
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input  placeholder="Search" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:charlesbking.com">
+	</form>
+</div>
+
+</header>
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">Paginated View on WP7</h1>
+	<div class="entry-content"><p>What I wanted to detail in these upcoming posts was how I implemented a paginated view for the &ldquo;card deck&rdquo; on each platform. To sum it up, Android and iOS
+provided better better controls out of the box to implement this functionality. Windows Phone 7 was kind of a pain so we will start with that first. So what was the end goal? The
+end goal was a fluid image-gallery type experience that allowed users to swipe through the cards with touch rather than buttons. This
+type of functionality is extremely common on mobile apps so I imagined there would be built in controls in the frameworks. Well I was half right..</p>
+
+<!-- more -->
+
+
+<h2>WP7 Pivot</h2>
+
+<p>Windows Phone 7 has no obvious choice for this control, however with some template modification, I ended up using the <a href="http://msdn.microsoft.com/en-us/library/microsoft.phone.controls.pivot(v=vs.92.aspx">Pivot</a>.
+The pivot control is a common element in metro style apps. The great thing about the pivot control is it inherits from ItemsControl,
+which gave me all the properties and events that I need to get the functionality, most importantly the SelectedItem property and LoadedPivotItem and UnloadedPivotItem events.</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;phone:PhoneApplicationPage.Resources&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;Style</span> <span class="na">x:Key=</span><span class="s">&quot;PivotItemStyle1&quot;</span> <span class="na">TargetType=</span><span class="s">&quot;controls:PivotItem&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;Setter</span> <span class="na">Property=</span><span class="s">&quot;Template&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;Setter.Value&gt;</span>
+</span><span class='line'>              <span class="nt">&lt;ControlTemplate</span> <span class="na">TargetType=</span><span class="s">&quot;controls:PivotItem&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;Grid&gt;</span>
+</span><span class='line'>                      <span class="nt">&lt;Grid.RowDefinitions&gt;</span>
+</span><span class='line'>                          <span class="nt">&lt;RowDefinition</span> <span class="na">Height=</span><span class="s">&quot;Auto&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>                          <span class="nt">&lt;RowDefinition</span> <span class="na">Height=</span><span class="s">&quot;*&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>                      <span class="nt">&lt;Grid.RowDefinitions/&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;Image</span> <span class="na">Source=</span><span class="s">&quot;{Binding ImageUri}&quot;</span> <span class="na">Stretch=</span><span class="s">&quot;Uniform&quot;</span> <span class="na">Height=</span><span class="s">&quot;630&quot;</span> <span class="na">Grid.Row=</span><span class="s">&quot;0&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;TextBlock</span> <span class="na">Text=</span><span class="s">{&quot;Binding</span> <span class="err">Name}&quot;</span> <span class="na">FontFamily=</span><span class="s">&quot;Segoe WP Semibold&quot;</span> <span class="na">Grid.Row=</span><span class="s">&quot;1&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;/Grid&gt;</span>
+</span><span class='line'>              <span class="nt">&lt;/ControlTemplate&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/Setter.Value&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/Setter&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/Style&gt;</span>
+</span><span class='line'><span class="nt">&lt;/phone:PhoneApplicationPage.Resources&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;controls:Pivot</span> <span class="na">ItemsSource=</span><span class="s">{&quot;Binding</span> <span class="err">CardList&quot;}</span> <span class="na">LoadedPivotItem=</span><span class="s">&quot;MainPivotLoadedPivotItem&quot;</span> <span class="na">UnloadedPivotItem=</span><span class="s">&quot;MainPivotUnloadedPivotItem&quot;</span>  <span class="na">ItemContainerStyle=</span><span class="s">{&quot;StaticResource</span> <span class="err">PivotItemStyle1}&quot;</span><span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So the layout code is fairly simple, a pivot control whose ItemsSource is databound to your viewmodel, and implements a custom style to get the layout the way you want it and binds the items to the viewmodel.
+So in your code you can subscribe to the LoadedPivotItem and UnloadedPivotItem events to access your Items every time the user changes the cards</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='csharp'><span class='line'><span class="k">public</span> <span class="nf">CardPage</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">//apply datacontext to the page to bind to my viewmodel.</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="n">DataContext</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">ViewModel</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">private</span> <span class="k">void</span> <span class="nf">MainPivotLoadedItem</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">PivotItemEventArgs</span> <span class="n">e</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>  
+</span><span class='line'>  <span class="c1">//get reference to control</span>
+</span><span class='line'>  <span class="kt">var</span> <span class="n">pivot</span> <span class="p">=</span> <span class="n">sender</span> <span class="k">as</span> <span class="n">Pivot</span><span class="p">();</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">pivot</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//get reference to SelectedItem as cast as my bound object</span>
+</span><span class='line'>    <span class="kt">var</span> <span class="n">card</span> <span class="p">=</span> <span class="n">pivot</span><span class="p">.</span><span class="n">SelectedItem</span> <span class="k">as</span> <span class="n">CardModel</span><span class="p">;</span>
+</span><span class='line'>      
+</span><span class='line'>  <span class="c1">//do some stuff if required. In my case, play a sound effect and narration file</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">card</span> <span class="p">!=</span><span class="k">null</span><span class="p">)</span> <span class="n">card</span><span class="p">.</span><span class="n">PlaySound</span><span class="p">();</span>
+</span><span class='line'>  
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">private</span> <span class="k">void</span> <span class="nf">MainPivotUnLoadedItem</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">PivotItemEventArgs</span> <span class="n">e</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">//get reference to control</span>
+</span><span class='line'>  <span class="kt">var</span> <span class="n">pivot</span> <span class="p">=</span> <span class="n">sender</span> <span class="k">as</span> <span class="n">Pivot</span><span class="p">();</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">pivot</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//get reference to SelectedItem as cast as my bound object</span>
+</span><span class='line'>  <span class="kt">var</span> <span class="n">card</span> <span class="p">=</span> <span class="n">pivot</span><span class="p">.</span><span class="n">SelectedItem</span> <span class="k">as</span> <span class="n">CardModel</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//do some stuff if required. In my case, stop any playing sound as card is was unloaded</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">card</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">card</span><span class="p">.</span><span class="n">KillSounds</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Pivot problems</h3>
+
+<p>In the end this solution is nice for its simplicity. First, the pivot control doesn&rsquo;t provide the experience you would expect from
+this type of application. Each item that is not in view is hidden, so without a header each item just kind of appears and animates into view. Secondly, the first problem
+is exaggerated since the Pivot control does not support dragging, which I found out is highly annoying to some users. See the video below for an example of
+what I am talking about.</p>
+
+<iframe width="100%" height="390" src="http://www.youtube.com/embed/nFPv0JQqKkk " frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+
+<h3>Panorama</h3>
+
+<p>So after some a few hours of racking my brain trying to create my own control by sub-classing ListBox, or adding to ScrollViewer with a
+StackPanel, I realized that another Microsoft.Phone.Controls class did exactly what I needed; the Panorama. Again, the Panorama required some templating
+to get the look layout I was after.</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>
+</span><span class='line'><span class="nt">&lt;phone:PhoneApplicationPage.Resources&gt;</span>
+</span><span class='line'>   <span class="nt">&lt;Style</span> <span class="na">x:Key=</span><span class="s">&quot;PanoramaStyle1&quot;</span> <span class="na">TargetType=</span><span class="s">&quot;controls:Panorama&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;Setter</span> <span class="na">Property=</span><span class="s">&quot;ItemsPanel&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;Setter.Value&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;ItemsPanelTemplate&gt;</span>
+</span><span class='line'>              <span class="nt">&lt;controlsPrimitives:PanoramaPanel</span> <span class="na">x:Name=</span><span class="s">&quot;panel&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="nt">&lt;/ItemsPanelTemplate&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/Setter.Value&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/Setter&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;Setter</span> <span class="na">Property=</span><span class="s">&quot;Foreground&quot;</span> <span class="na">Value=</span><span class="s">&quot;{StaticResource PhoneForegroundBrush}&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;Setter</span> <span class="na">Property=</span><span class="s">&quot;Background&quot;</span> <span class="na">Value=</span><span class="s">&quot;Transparent&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;Setter</span> <span class="na">Property=</span><span class="s">&quot;Template&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;Setter.Value&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;ControlTemplate</span> <span class="na">TargetType=</span><span class="s">&quot;controls:Panorama&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>              <span class="nt">&lt;Grid&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;Grid.RowDefinitions&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;RowDefinition</span> <span class="na">Height=</span><span class="s">&quot;1&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;RowDefinition</span> <span class="na">Height=</span><span class="s">&quot;*&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/Grid.RowDefinitions&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;controlsPrimitives:PanningBackgroundLayer</span> <span class="na">x:Name=</span><span class="s">&quot;BackgroundLayer&quot;</span>
+</span><span class='line'>                                                           <span class="na">HorizontalAlignment=</span><span class="s">&quot;Left&quot;</span> <span class="na">Grid.RowSpan=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;Border</span> <span class="na">x:Name=</span><span class="s">&quot;background&quot;</span> <span class="na">Background=</span><span class="s">&quot;{TemplateBinding Background}&quot;</span>
+</span><span class='line'>                          <span class="na">CacheMode=</span><span class="s">&quot;BitmapCache&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/controlsPrimitives:PanningBackgroundLayer&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;controlsPrimitives:PanningTitleLayer</span> <span class="na">x:Name=</span><span class="s">&quot;TitleLayer&quot;</span> <span class="na">CacheMode=</span><span class="s">&quot;BitmapCache&quot;</span>
+</span><span class='line'>                                                      <span class="na">ContentTemplate=</span><span class="s">&quot;{TemplateBinding TitleTemplate}&quot;</span> <span class="na">Content=</span><span class="s">&quot;{TemplateBinding Title}&quot;</span> <span class="na">FontSize=</span><span class="s">&quot;187&quot;</span>
+</span><span class='line'>                                                      <span class="na">FontFamily=</span><span class="s">&quot;{StaticResource PhoneFontFamilyLight}&quot;</span> <span class="na">HorizontalAlignment=</span><span class="s">&quot;Left&quot;</span> <span class="na">Margin=</span><span class="s">&quot;0,0,0,0&quot;</span> <span class="na">Grid.Row=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="nt">&lt;controlsPrimitives:PanningLayer</span> <span class="na">x:Name=</span><span class="s">&quot;ItemsLayer&quot;</span> <span class="na">HorizontalAlignment=</span><span class="s">&quot;Left&quot;</span>
+</span><span class='line'>                                                 <span class="na">Grid.Row=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>                  <span class="nt">&lt;ItemsPresenter</span> <span class="na">x:Name=</span><span class="s">&quot;items&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/controlsPrimitives:PanningLayer&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>              <span class="nt">&lt;/Grid&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/ControlTemplate&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/Setter.Value&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/Setter&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/Style&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;DataTemplate</span> <span class="na">x:Key=</span><span class="s">&quot;loadedItemsTemplate&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;StackPanel</span> <span class="na">Margin=</span><span class="s">&quot;0,-30,0,0&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;Image</span> <span class="na">Width=</span><span class="s">&quot;800&quot;</span> <span class="na">Height=</span><span class="s">&quot;340&quot;</span> <span class="na">Source=</span><span class="s">&quot;{Binding ImageSource}&quot;</span> <span class="na">Stretch=</span><span class="s">&quot;Uniform&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;StackPanel</span> <span class="na">HorizontalAlignment=</span><span class="s">&quot;Center&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;TextBlock</span> <span class="na">TextWrapping=</span><span class="s">&quot;Wrap&quot;</span> <span class="na">Text=</span><span class="s">&quot;{Binding Name}&quot;</span> <span class="na">Foreground=</span><span class="s">&quot;#FF726A6A&quot;</span>
+</span><span class='line'>                       <span class="na">FontFamily=</span><span class="s">&quot;../Fonts/Albertsthal_Typewriter.ttf#Albertsthal Typewriter&quot;</span> <span class="na">FontSize=</span><span class="s">&quot;35&quot;</span> <span class="na">FontWeight=</span><span class="s">&quot;Bold&quot;</span>
+</span><span class='line'>                       <span class="na">d:LayoutOverrides=</span><span class="s">&quot;Width&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;TextBlock</span> <span class="na">TextWrapping=</span><span class="s">&quot;Wrap&quot;</span> <span class="na">Text=</span><span class="s">&quot;{Binding Phoenetic}&quot;</span> <span class="na">Foreground=</span><span class="s">&quot;#FF726A6A&quot;</span>
+</span><span class='line'>                       <span class="na">FontFamily=</span><span class="s">&quot;Courier New&quot;</span> <span class="na">FontStyle=</span><span class="s">&quot;Italic&quot;</span> <span class="na">FontSize=</span><span class="s">&quot;18.667&quot;</span> <span class="na">FontWeight=</span><span class="s">&quot;Bold&quot;</span> <span class="na">d:LayoutOverrides=</span><span class="s">&quot;Width&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/StackPanel&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/StackPanel&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/DataTemplate&gt;</span>
+</span><span class='line'> <span class="nt">&lt;/phone:PhoneApplicationPage.Resources&gt;</span>
+</span><span class='line'>
+</span><span class='line'> <span class="nt">&lt;Grid</span> <span class="na">x:Name=</span><span class="s">&quot;LayoutRoot&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nt">&lt;controls:Panorama</span> <span class="na">x:Name=</span><span class="s">&quot;MainPanorama&quot;</span> <span class="na">ItemsSource=</span><span class="s">&quot;{Binding Dinosaurs}&quot;</span> <span class="na">ItemTemplate=</span><span class="s">&quot;{StaticResource loadItemsTemplate}&quot;</span> <span class="na">Style=</span><span class="s">&quot;{PanoramaStyle1}&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nt">&lt;/Grid&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So with this template, I changed the style of the panorama to minimize the massive header section to make it look more like a card. For the panorama,
+everything is loaded at runtime, so there are no LoadedItem or UnloadedItem events to subscribe to. This makes getting the currently selected item
+a little different than the Pivot control. The relevant event to handle for the Panorama is the SelectionChanged event. You can utilize it in your
+code-behind, or preferably your <a href="http://www.codeproject.com/Articles/160892/Binding-Events-to-Methods-in-the-Silverlight-MVVM">viewmodel</a>.</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='csharp'><span class='line'><span class="k">public</span> <span class="nf">MainPage</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">//apply datacontext to the page to bind to my viewmodel.</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="n">DataContext</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">ViewModel</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//subscribe to the selection changed event</span>
+</span><span class='line'>  <span class="n">MainPanorama</span><span class="p">.</span><span class="n">SelectionChanged</span> <span class="p">+=</span> <span class="k">new</span> <span class="n">EventHandler</span><span class="p">(</span><span class="n">ListSelectionChanged</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">private</span> <span class="k">void</span> <span class="nf">ListSelectionChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">SelectionChangedEventArgs</span> <span class="n">e</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">Card</span> <span class="n">newItem</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">Card</span> <span class="n">oldItem</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//get the currently selected panorama item </span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">AddedItems</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>       <span class="n">currentItem</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">AddedItems</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="k">as</span> <span class="n">Card</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//get previous item that was unselected </span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">RemovedItems</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>       <span class="n">oldItem</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">RemovedItems</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="k">as</span> <span class="n">Card</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//do some on change some stuff. In my case, play some sounds.</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">oldItem</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">oldItem</span><span class="p">.</span><span class="n">KillSounds</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">newItem</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">newItem</span><span class="p">.</span><span class="n">PlaySounds</span><span class="p">();</span>
+</span><span class='line'>  
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So anyways that is pretty straightforward and is a much nicer experience for the user. I have seen many blog posts detailing the use of the Pivot control for
+an items reel of sorts. IMHO, the panorama is nicer. See the difference in the video below&hellip;</p>
+
+<iframe width="100%" height="390" src="http://www.youtube.com/embed/TE_z7BUQrYQ " frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+
+<h3>Lazy loading</h3>
+
+<p>So the downside to the panorama control is that it utilizes a non-virtualized panel for its ItemsControl.  What does this mean for us? It means that every Image in the view
+is going to load and display on startup. That absolutely kills your memory. Microsoft recommends that you keep your peak memory usage below 90MB, I could easily surpass that with
+around 30 images loading in the panorama without lazy-loading. So to get acceptable performance I <em>had</em> to implement some lazy-loading technique for the images in bound collection.
+To implement this, I started with my datamodel.</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='csharp'><span class='line'><span class="na">  </span>
+</span><span class='line'><span class="na"> [DataContractAttribute]</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">class</span> <span class="nc">Card</span> <span class="p">:</span> <span class="n">INotifyPropertyChanged</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>          <span class="c1">//this is the relative path to the card image. </span>
+</span><span class='line'><span class="na">         [DataMember]</span>
+</span><span class='line'>          <span class="k">public</span> <span class="kt">string</span> <span class="n">ImageUri</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
+</span><span class='line'><span class="na">         </span>
+</span><span class='line'><span class="na">         [DataMember]</span>
+</span><span class='line'>          <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
+</span><span class='line'><span class="na">         </span>
+</span><span class='line'><span class="na">         [DataMember]</span>
+</span><span class='line'>          <span class="k">public</span> <span class="kt">string</span> <span class="n">Phoenetic</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
+</span><span class='line'>          
+</span><span class='line'>          <span class="c1">//this is the ImageSource class that I will bind to in my view.</span>
+</span><span class='line'>          <span class="k">private</span> <span class="n">ImageSource</span> <span class="n">_imgSource</span><span class="p">;</span>
+</span><span class='line'><span class="na">         [IgnoreDataMember]</span>
+</span><span class='line'>          <span class="k">public</span> <span class="n">ImageSource</span> <span class="n">ImageSource</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">get</span><span class="p">{</span><span class="k">return</span> <span class="n">_imgSource</span><span class="p">;}</span>
+</span><span class='line'>              <span class="k">set</span>
+</span><span class='line'>              <span class="p">{</span>
+</span><span class='line'>                  <span class="k">if</span><span class="p">(</span><span class="n">_imgSource</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="p">!</span><span class="n">_imgSource</span><span class="p">.</span><span class="n">Equals</span><span class="p">(</span><span class="k">value</span><span class="p">))</span>
+</span><span class='line'>                  <span class="p">{</span>
+</span><span class='line'>                      <span class="n">_imgSource</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+</span><span class='line'>                      <span class="n">OnPropertyChanged</span><span class="p">(</span><span class="s">&quot;ImageSource&quot;</span><span class="p">);</span>
+</span><span class='line'>                  <span class="p">}</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          
+</span><span class='line'>          <span class="k">public</span> <span class="k">event</span> <span class="n">PropertChangedEventHandler</span> <span class="n">PropertyChanged</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">protected</span> <span class="k">void</span> <span class="nf">OnPropertyChanged</span><span class="p">(</span><span class="kt">string</span> <span class="n">propertyName</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">if</span><span class="p">(</span><span class="n">PropertyChanged</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+</span><span class='line'>                  <span class="n">PropertyChanged</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">new</span> <span class="n">PropertyChangedEventArgs</span><span class="p">(</span><span class="n">propertyName</span><span class="p">));</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now I have this nice data model that holds both the ImageURI and an ImageSource property that I can bind to. Let&rsquo;s look at the data template for the Panorama one more time-</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'> <span class="nt">&lt;DataTemplate</span> <span class="na">x:Key=</span><span class="s">&quot;loadedItemsTemplate&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;StackPanel</span> <span class="na">Margin=</span><span class="s">&quot;0,-30,0,0&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;Image</span> <span class="na">Width=</span><span class="s">&quot;800&quot;</span> <span class="na">Height=</span><span class="s">&quot;340&quot;</span> <span class="na">Source=</span><span class="s">&quot;{Binding ImageSource}&quot;</span> <span class="na">Stretch=</span><span class="s">&quot;Uniform&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;StackPanel</span> <span class="na">HorizontalAlignment=</span><span class="s">&quot;Center&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;TextBlock</span> <span class="na">TextWrapping=</span><span class="s">&quot;Wrap&quot;</span> <span class="na">Text=</span><span class="s">&quot;{Binding Name}&quot;</span> <span class="na">Foreground=</span><span class="s">&quot;#FF726A6A&quot;</span>
+</span><span class='line'>                       <span class="na">FontFamily=</span><span class="s">&quot;../Fonts/Albertsthal_Typewriter.ttf#Albertsthal Typewriter&quot;</span> <span class="na">FontSize=</span><span class="s">&quot;35&quot;</span> <span class="na">FontWeight=</span><span class="s">&quot;Bold&quot;</span>
+</span><span class='line'>                       <span class="na">d:LayoutOverrides=</span><span class="s">&quot;Width&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;TextBlock</span> <span class="na">TextWrapping=</span><span class="s">&quot;Wrap&quot;</span> <span class="na">Text=</span><span class="s">&quot;{Binding Phoenetic}&quot;</span> <span class="na">Foreground=</span><span class="s">&quot;#FF726A6A&quot;</span>
+</span><span class='line'>                       <span class="na">FontFamily=</span><span class="s">&quot;Courier New&quot;</span> <span class="na">FontStyle=</span><span class="s">&quot;Italic&quot;</span> <span class="na">FontSize=</span><span class="s">&quot;18.667&quot;</span> <span class="na">FontWeight=</span><span class="s">&quot;Bold&quot;</span> <span class="na">d:LayoutOverrides=</span><span class="s">&quot;Width&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;/StackPanel&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/StackPanel&gt;</span>
+</span><span class='line'> <span class="nt">&lt;/DataTemplate&gt;</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now here lets take a look at my Viewmodel. If you remember from earlier, the important event handler for the Panorama control for my use was the SelectionChanged event.
+On the SelectionChanged event, I get the index of the currently selected item, and essentially start a background worker to assign the ImageSource
+property from the ImageUri property for the next two images. At the same time, I null the references to ImageSource for the previous two images. This allows the GC to free up their memory on the
+next cycle.</p>
+
+<figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class='csharp'><span class='line'>    <span class="k">public</span> <span class="k">void</span> <span class="nf">ListSelectionChanged</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">SelectionChangedEventArgs</span> <span class="n">e</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// get current selected card</span>
+</span><span class='line'>            <span class="kt">var</span> <span class="n">currentItem</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">AddedItems</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="k">as</span> <span class="n">Card</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// add two more card in worker thread </span>
+</span><span class='line'>            <span class="n">LoadImageViewCardsAsync</span><span class="p">(</span><span class="n">currentItem</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">/// &lt;summary&gt;</span>
+</span><span class='line'>        <span class="c1">/// Loads the next two card images in the deck and unloads the previous two</span>
+</span><span class='line'>        <span class="c1">/// &lt;/summary&gt;</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">void</span> <span class="nf">LoadImageViewCardsAsync</span><span class="p">(</span><span class="n">Card</span> <span class="n">currentCard</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="kt">var</span> <span class="n">bgWorker</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BackgroundWorker</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">bgWorker</span><span class="p">.</span><span class="n">DoWork</span> <span class="p">+=</span> <span class="n">BgWorkerDoWork</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            <span class="kt">var</span> <span class="n">index</span> <span class="p">=</span> <span class="n">Dinosaurs</span><span class="p">.</span><span class="n">IndexOf</span><span class="p">(</span><span class="n">currentCard</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">bgWorker</span><span class="p">.</span><span class="n">RunWorkerAsync</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      
+</span><span class='line'>        <span class="k">private</span> <span class="k">void</span> <span class="nf">BgWorkerDoWork</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">DoWorkEventArgs</span> <span class="n">e</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="kt">var</span> <span class="n">index</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">e</span><span class="p">.</span><span class="n">Argument</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="p">(</span><span class="n">index</span> <span class="p">+</span> <span class="m">2</span><span class="p">);</span> <span class="n">i</span><span class="p">++)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">&gt;</span> <span class="n">Dinosaurs</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>                <span class="kt">var</span> <span class="n">i1</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">_dispatcher</span><span class="p">.</span><span class="n">BeginInvoke</span><span class="p">(</span><span class="k">delegate</span>
+</span><span class='line'>                                            <span class="p">{</span>
+</span><span class='line'>                                                <span class="kt">var</span> <span class="n">bmp</span> <span class="p">=</span>
+</span><span class='line'>                                                    <span class="k">new</span> <span class="nf">BitmapImage</span><span class="p">(</span><span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="n">Dinosaurs</span><span class="p">[</span><span class="n">i1</span><span class="p">].</span><span class="n">ImageUri</span><span class="p">,</span> <span class="n">UriKind</span><span class="p">.</span><span class="n">Relative</span><span class="p">));</span>
+</span><span class='line'>                                                <span class="n">Dinosaurs</span><span class="p">[</span><span class="n">i1</span><span class="p">].</span><span class="n">ImageSource</span> <span class="p">=</span> <span class="n">bmp</span><span class="p">;</span>
+</span><span class='line'>                                            <span class="p">});</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">//remove old images from UI by nulling the reference</span>
+</span><span class='line'>            <span class="k">for</span> <span class="p">(</span><span class="kt">var</span> <span class="n">i</span> <span class="p">=</span> <span class="n">index</span> <span class="p">-</span> <span class="m">2</span><span class="p">;</span> <span class="n">i</span> <span class="p">&gt;=</span> <span class="p">(</span><span class="n">index</span> <span class="p">-</span> <span class="m">3</span><span class="p">);</span> <span class="n">i</span><span class="p">--)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>                <span class="kt">var</span> <span class="n">i1</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">_dispatcher</span><span class="p">.</span><span class="n">BeginInvoke</span><span class="p">(</span><span class="k">delegate</span> <span class="p">{</span> <span class="n">Dinosaurs</span><span class="p">[</span><span class="n">i1</span><span class="p">].</span><span class="n">ImageSource</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span> <span class="p">});</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So what was the result of this? For about 57 cards being loaded at a time, I was able to reduce my memory usage from 100MB to ~50MB while
+viewing a flash card deck. If you run the Memory Analyzer you will see that it is the image loads on the UI that kill the memory, so this method
+removes that barrier. To go even further, you could implement a buffer collection that is bound to the Panorama and dynamically load and unload full
+items, however without the image my objects are very small so that was overkill for me.</p>
+
+<h3>Drawbacks</h3>
+
+<p> The main drawback with using a panorama control is the initial load time for a page utilizing a panorama. Check out this telerik <a href="http://blogs.telerik.com/blogs/posts/10-11-01/windows-phone-7-performance---emulator-vs-physical-device.aspx">post</a> about
+ the subject. This drawback was acceptable for me for the vastly better user experience vs. a pivot control.</p>
+
+<h3>FlipView to the rescue</h3>
+
+<p> I wanted to add this in- Windows 8 fixes this problem and introduces a control called <a href="http://msdn.microsoft.com/en-us/library/windows/apps/hh850405.aspx">FlipView</a>. Awesome control that can be virtualized and databound with built-in touch and button navigation.</p>
+
+<p> Next post I will talk about my Android implementation!</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-23T07:41:00-07:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/panorama/'>Panorama</a>, <a class='category' href='/blog/categories/pivot/'>Pivot</a>, <a class='category' href='/blog/categories/wp7/'>WP7</a>, <a class='category' href='/blog/categories/c-number/'>c#</a>, <a class='category' href='/blog/categories/controls/'>controls</a>, <a class='category' href='/blog/categories/lazy-loading/'>lazy-loading</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/07/23/paginated-view-on-wp7/#disqus_thread">Comments</a></span>
+	
+</div></article>
+<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Charles King
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+Included file 'fancybox.html' not found in _includes directory <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'codinginthebasement';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://charlesbking.com/blog/2012/07/23/paginated-view-on-wp7/';
+        var disqus_url = 'http://charlesbking.com/blog/2012/07/23/paginated-view-on-wp7/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-32494194-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

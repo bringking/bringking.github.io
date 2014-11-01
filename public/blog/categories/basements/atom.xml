@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Basements | Coding in the basement]]></title>
+  <link href="http://charlesbking.com/blog/categories/basements/atom.xml" rel="self"/>
+  <link href="http://charlesbking.com/"/>
+  <updated>2014-03-09T21:51:52-07:00</updated>
+  <id>http://charlesbking.com/</id>
+  <author>
+    <name><![CDATA[Charles King]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[First!]]></title>
+    <link href="http://charlesbking.com/blog/2012/06/05/hello/"/>
+    <updated>2012-06-05T20:48:00-07:00</updated>
+    <id>http://charlesbking.com/blog/2012/06/05/hello</id>
+    <content type="html"><![CDATA[<p>First post! I went all out and started an Octopress based blog.  This was partly just to challenge myself as Octopress is not your average
+wordpress blog. However, if you are used to the command line and somewhat familiar with ruby or git, you will feel right at home. Check it out
+<a href="http://octopress.org/">here</a>. The theme I am using <a href="https://github.com/tommy351/Octopress-Theme-Slash">Slash</a>. Anyways
+why this blog? I wanted to provide a place for me to organize my thoughts and ramblings on programming,
+working in IT and specifically working IT in non-desirable places, like a basement. So I don&rsquo;t know how much I will
+have to say, however I will post as I learn new and cool things about my adventures in coding and/or life. Enjoy!</p>
+]]></content>
+  </entry>
+  
+</feed>

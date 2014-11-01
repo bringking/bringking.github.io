@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Java | Coding in the basement]]></title>
+  <link href="http://charlesbking.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://charlesbking.com/"/>
+  <updated>2014-03-09T21:51:52-07:00</updated>
+  <id>http://charlesbking.com/</id>
+  <author>
+    <name><![CDATA[Charles King]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My First Adventure Into iOS]]></title>
+    <link href="http://charlesbking.com/blog/2012/06/06/my-first-adventure-into-ios/"/>
+    <updated>2012-06-06T18:28:00-07:00</updated>
+    <id>http://charlesbking.com/blog/2012/06/06/my-first-adventure-into-ios</id>
+    <content type="html"><![CDATA[<p>Today I started my porting the simplest app in my catalog over to iOS. The app is <a href="http://www.windowsphone.com/en-us/apps/b474228c-e9d1-4fed-be5a-34025e52162b">Critter Cards- Toddler</a>.
+Admittedly, it is not a complex app, just flash cards with the ability to overwrite the built in narration with your own. So I need
+a control for displaying a launcher of sorts to choose your deck, a control to navigate between cards and some pages to set settings.</p>
+
+<p>As of today I have completed the initial design of the front page of launcher icons for navigating around the app. So how did the process compare from
+WP7 &ndash;> Android &ndash;> iOS? Let&rsquo;s take a look.</p>
+
+<p>This is the look I wanted to achieve on each platform-</p>
+
+<p><img class="center <a" src="href="http://catalog.zune.net/v3.2/en-US/image/ee84b835-5258-4981-aad7-eda1bb46a049?width=1280&amp;height=720&amp;resize=true">http://catalog.zune.net/v3.2/en-US/image/ee84b835-5258-4981-aad7-eda1bb46a049?width=1280&amp;height=720&amp;resize=true</a>" width="240" height="400"></p>
+
+<h2>WP7</h2>
+
+<p>Since this was the first platform I started on, I decided the launcher should be &ldquo;metro&rdquo; grid of tiles to choose your card deck.
+This is where the power of <a href="http://msdn.microsoft.com/en-us/library/system.windows.uielement%28v=vs.95%29.aspx">UIElements</a> and <a href="http://msdn.microsoft.com/en-us/library/ms742521.aspx">DataTemplates</a> in SilverLight and WPF comes in handy,
+and made this task really simple. See below for an example-</p>
+
+<!-- more -->
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;DataTemplate</span> <span class="na">x:Key=</span><span class="s">&quot;tileItemsTemplate1&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>        <span class="ni">&amp;lt;</span>ListBoxItem <span class="ni">&amp;gt;</span>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>toolkit:ContextMenuService.ContextMenu <span class="ni">&amp;gt;</span>
+</span><span class='line'>                <span class="ni">&amp;lt;</span>toolkit:ContextMenu Opened=&quot;ContextMenuOpened&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>                    <span class="ni">&amp;lt;</span>toolkit:MenuItem Header=&quot;Delete Card Set&quot; Click=&quot;DeleteCardSetClick&quot;<span class="ni">&amp;gt;&amp;lt;</span>/toolkit:MenuItem<span class="ni">&amp;gt;</span>
+</span><span class='line'>                    <span class="ni">&amp;lt;</span>toolkit:MenuItem Header=&quot;Add Custom Card Set&quot; Click=&quot;AddNewClick&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'>                    <span class="ni">&amp;lt;</span>toolkit:MenuItem Header=&quot;Edit Set&quot; Click=&quot;EditSetClick&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'>                <span class="ni">&amp;lt;</span>/toolkit:ContextMenu<span class="ni">&amp;gt;</span>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>/toolkit:ContextMenuService.ContextMenu<span class="ni">&amp;gt;</span>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>Button x:Name=&quot;button&quot; Click=&quot;TileClick1&quot; Style=&quot;{StaticResource ButtonStyle2}&quot; BorderBrush=&quot;{x:Null}&quot; toolkit:TiltEffect.IsTiltEnabled=&quot;True&quot; Padding=&quot;-13&quot; Foreground=&quot;Transparent&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>                <span class="ni">&amp;lt;</span>Grid <span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>                    <span class="ni">&amp;lt;</span>Rectangle Height=&quot;234&quot; Width=&quot;227&quot; CacheMode=&quot;BitmapCache&quot; Fill=&quot;{Binding TileColor,Converter={StaticResource ColorToBrushConverter}}&quot;  Margin=&quot;0,1,-5,0&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'>                    <span class="ni">&amp;lt;</span>Image Source=&quot;{Binding ImageUri}&quot;  Stretch=&quot;None&quot; CacheMode=&quot;BitmapCache&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'>                    <span class="ni">&amp;lt;</span>TextBlock Text=&quot;{Binding Name}&quot; FontSize=&quot;26&quot; TextAlignment=&quot;Center&quot; FontWeight=&quot;Bold&quot; Foreground=&quot;White&quot; FontFamily=&quot;Segoe WP Semibold&quot; Height=&quot;35&quot; Margin=&quot;0,200,-2,0&quot; Width=&quot;224&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="ni">&amp;lt;</span>/Grid<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>/Button<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>/ListBoxItem<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;Listbox</span> <span class="na">ItemsSource=</span><span class="s">&quot;{Binding Tiles}&quot;</span> <span class="na">ItemTemplate=</span><span class="s">&quot;{StaticResource tileItemsTemplate1}&quot;</span>  <span class="nt">/&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>As you can see I set a custom DataTemplate for the items contained in the ListBox. In the DataTemplate I defined a simple Button to obtain
+the ButtonBase events, such as Click. Then I set the button&rsquo;s <em>content</em> to be a Grid containing a colored rectangle, an image
+and a textblock. If you were maintaining multiple screens you could also accomplish this by setting all this data in a <a href="http://msdn.microsoft.com/en-us/magazine/cc721611.aspx">custom style</a> for the button itself.
+ When you get used to it, it is quite powerful and you can do some interesting things with overriding templates to create
+custom UI elements. As you can see the ListBox ItemSource is data bound to a collection, and the ItemTemplate items are data bound as well.
+This design allows for tiles to be added easily to the bound collection, requiring no changes to the UI template.
+I will go into this in another post. Right now I just want to focus on the UI creation.</p>
+
+<h2>Android</h2>
+
+<p>Now with Android I decided to go with a static layout defined in the similar-to-XAML, xml graphical layout
+in Android. Why static? Well there is <a href="http://www.stackoverflow.com/questions/6007941/android-data-binding-similar-to-wpf">no built in &ldquo;Databinding&rdquo;</a> in Android so I had a choice;
+Statically create the layout in XML or create the layout in the code behind. I chose statically creating for the flexibility of
+seeing the design take shape in the extremely helpful &ldquo;Graphical Layout&rdquo; tab in an Eclipse android project. With this view, you can target
+the many different screen sizes in Android and see how your layout will look on those resolutions. Now, when I had my layout the way I wanted it,
+I just hooked up an EventListener to the buttons and moved on. Not the most extensible solution as adding tiles would be a pain, but maybe when
+I want to add a new cardset, I will go back and create the view in the code behind so it is more robust.  Here is an example of the layout-</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span><span class="ni">&amp;lt;</span>?xml version=<span class="ni">&amp;ldquo;</span>1.0<span class="ni">&amp;rdquo;</span> encoding=<span class="ni">&amp;ldquo;</span>utf-8<span class="ni">&amp;rdquo;</span>?&gt;
+</span><span class='line'><span class="ni">&amp;lt;</span>LinearLayout xmlns:android=<span class="ni">&amp;ldquo;</span><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>http://schemas.android.com/apk/res/android<span class="nt">&lt;/a&gt;</span><span class="ni">&amp;rdquo;</span><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>android:layout_width=&quot;fill_parent&quot;
+</span><span class='line'>android:layout_height=&quot;fill_parent&quot;
+</span><span class='line'>android:orientation=&quot;vertical&quot;
+</span><span class='line'>android:id=&quot;@+id/mainLinear&quot;
+</span><span class='line'><span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>       <span class="ni">&amp;lt;</span>ScrollView
+</span><span class='line'>    android:layout_width=&quot;fill_parent&quot;
+</span><span class='line'>    android:layout_height=&quot;0dp&quot;
+</span><span class='line'>    android:layout_weight=&quot;1&quot;
+</span><span class='line'>    android:scrollbars=&quot;none&quot;
+</span><span class='line'>    android:id=&quot;@+id/scrollViewMain&quot;
+</span><span class='line'>    <span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="ni">&amp;lt;</span>TableLayout  android:layout_width=&quot;fill_parent&quot; android:layout_height=&quot;wrap_content&quot; android:orientation=&quot;vertical&quot; android:id=&quot;@+id/maintable&quot;<span class="ni">&amp;gt;</span>&quot;
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>TableRow android:layout_width=&quot;fill_parent&quot; <span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>ImageButton
+</span><span class='line'>            android:contentDescription=&quot;@string/desc&quot;
+</span><span class='line'>            android:id=&quot;@+id/btnDesert&quot;
+</span><span class='line'>            android:layout_width=&quot;180dp&quot;
+</span><span class='line'>            android:layout_height=&quot;180dp&quot;
+</span><span class='line'>            android:layout_weight=&quot;1&quot;
+</span><span class='line'>            android:padding=&quot;10dp&quot;
+</span><span class='line'>            android:scaleType=&quot;fitCenter&quot;
+</span><span class='line'>            android:src=&quot;@drawable/desert&quot;
+</span><span class='line'>            android:onClick=&quot;ClickHandler&quot;
+</span><span class='line'>            /<span class="ni">&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>ImageButton
+</span><span class='line'>            android:contentDescription=&quot;@string/desc&quot;
+</span><span class='line'>            android:id=&quot;@+id/btnSavanna&quot;
+</span><span class='line'>            android:layout_width=&quot;180dp&quot;
+</span><span class='line'>            android:layout_height=&quot;180dp&quot;
+</span><span class='line'>            android:layout_weight=&quot;1&quot;
+</span><span class='line'>            android:padding=&quot;10dp&quot;
+</span><span class='line'>            android:scaleType=&quot;fitCenter&quot;
+</span><span class='line'>            android:src=&quot;@drawable/savanna&quot;
+</span><span class='line'>            android:onClick=&quot;ClickHandler&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>/TableRow<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>/TableLayout<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>/ScrollView<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>In the code behind there is the requisite 10 item switch-case (ugh) that gets the ID of the sending ImageButton, and passes that context to the CritterCardsPage activity and opens the
+CritterCardsPage activity.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>[ ] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="n">ClickHandler</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;{</span>
+</span><span class='line'>    <span class="n">Intent</span> <span class="n">nav</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">switch</span><span class="o">(</span><span class="n">v</span><span class="o">.</span><span class="na">getId</span><span class="o">())</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnDesert</span><span class="o">:</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>           <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">DESERT</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnSavanna</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">SAVANNA</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnArctic</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">ARCTIC</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnRainforest</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">RAINFOREST</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnForest</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">FOREST</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnUnderwater</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">UNDERWATER</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnRandom</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">CritterCardsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">nav</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">&quot;set&quot;</span><span class="o">,</span> <span class="n">CardType</span><span class="o">.</span><span class="na">RANDOM</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnSupport</span><span class="o">:</span>
+</span><span class='line'>     <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">SupportPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btnSettings</span><span class="o">:</span>
+</span><span class='line'>         <span class="n">nav</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">CritterCardsAnimalsActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span><span class="n">SettingsPage</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="o">(</span><span class="n">nav</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>           <span class="n">startActivity</span><span class="o">(</span><span class="n">nav</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So Android and WP7 should see nice and familiar to anyone who is comfortable with web development and CSS styling. All the same concepts are used,
+fixed width elements, dynamic width elements, nesting elements etc. Powerful and straight forward (for me at least), however in this case
+not optimal.</p>
+
+<h2>iOS</h2>
+
+<p>So moving to iOS represented in one way a step back in ease of use for creation of a UI. No more XML based UI design, no more similarities to
+web development. You can either create the UI at runtime in your ViewController or create it in the Interface Builder with a WinForms like
+drag and drop interface. For beginners to programming this style is welcome and presents a low entry barrier to designing a UI, however
+for me it felt like a step back. I am new to iOS but not new to programming, so I was looking for the more powerful ways to create the interface, and
+left wanting. So, to create my &ldquo;metro&rdquo; grid in iOS I had to resort to doing it in code with the ViewController. Not that this is bad by any means,
+in fact IMHO it is more robust than my Android solution, however compared to Silverlight and WPF, the same effect in iOS results in a much larger chunk of code.
+Now take this section as my first attempt, this is what I came up with after my first few hours of iOS programming. I could come across a better way
+as I become more familiar. If that happens I will surely update here. This solution started with the example at <a href="http://www.conecode.com/news/2012/05/ios-how-to-create-a-grid-of-uibuttons/">Cone Code</a></p>
+
+<p>So it starts with the ViewController.h and adding a multi-dimensional array to store the button locations</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ViewController.h [ ]  </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">UIKit</span><span class="o">/</span><span class="n">UIKit</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">kButtonColumns</span> <span class="mi">2</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">kButtonRows</span> <span class="mi">5</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">@</span><span class="n">interface</span> <span class="n">ViewController</span> <span class="o">:</span> <span class="n">UIViewController</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">UIButton</span> <span class="o">*</span><span class="n">buttons</span><span class="p">[</span><span class="n">kButtonColumns</span><span class="p">][</span><span class="n">kButtonRows</span><span class="p">];</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Next code to create the &ldquo;Tiles&rdquo; in the implementation.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ViewController.m [ ]  </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">ViewController</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">QuartzCore</span><span class="o">/</span><span class="n">QuartzCore</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Tile</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@interface</span> <span class="nc">ViewController</span> <span class="p">()</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">ViewController</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>  <span class="c1">// Do any additional setup after loading the view, typically from a nib.&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="c1">//get the device screen size and set the UIScrollView height to allow for 5 tiles that are one third the height of the screen.</span>
+</span><span class='line'>  <span class="c1">//Thus allowing for 3 tiles on the screen and 2 off.</span>
+</span><span class='line'>  <span class="n">CGRect</span> <span class="n">screenRect</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">UIScrollView</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">tempScrollView</span><span class="o">=</span><span class="p">(</span><span class="n">UIScrollView</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">tempScrollView</span><span class="p">.</span><span class="n">contentSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">screenRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="p">,</span> <span class="p">(</span><span class="n">screenRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="c1">//call the placeTile method</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span> <span class="n">placeTiles</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>To store the data for the tiles I created a custom class called tile. Tile holds three properties,
+an image, a title and a color. It also implements an initialization method (I miss object initializers in C#) to pass in
+the values on init.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Tile.h [ ]  </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">Foundation</span><span class="o">/</span><span class="n">Foundation</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@interface</span> <span class="nc">Tile</span> : <span class="nc">NSObject</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@property</span> <span class="p">(</span><span class="n">retain</span><span class="p">)</span> <span class="n">UIImage</span> <span class="o">*</span> <span class="n">tileImage</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">retain</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span> <span class="n">tileTitle</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">retain</span><span class="p">)</span> <span class="n">UIColor</span> <span class="o">*</span> <span class="n">tileColor</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">id</span><span class="p">)</span><span class="nl">initWithImage:</span> <span class="p">(</span><span class="n">UIImage</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">image</span> <span class="nl">andTitle:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">title</span> <span class="nl">andColor:</span><span class="p">(</span><span class="n">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="n">color</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Here is the implementation</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Tile.m [ ]  </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">import</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Tile</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@implementation</span> <span class="nc">Tile</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@synthesize</span> <span class="n">tileColor</span><span class="p">;</span>
+</span><span class='line'><span class="k">@synthesize</span> <span class="n">tileImage</span><span class="p">;</span>
+</span><span class='line'><span class="k">@synthesize</span> <span class="n">tileTitle</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">id</span><span class="p">)</span><span class="nl">initWithImage:</span><span class="p">(</span><span class="n">UIImage</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">image</span> <span class="nl">andTitle:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">title</span> <span class="nl">andColor:</span><span class="p">(</span><span class="n">UIColor</span> <span class="o">*</span><span class="p">)</span><span class="n">color</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span><span class="p">(</span><span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="n">init</span><span class="p">])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">tileColor</span> <span class="o">=</span> <span class="n">color</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">tileImage</span> <span class="o">=</span> <span class="n">image</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">tileTitle</span> <span class="o">=</span> <span class="n">title</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">@end</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So now that I have my tile object, I created a method in the ViewController.m to initialize an
+NSArray of tiles to use in the placeTiles method.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ViewController.m [ ]  </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="n">getTiles</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">tiles</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">tiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObjects:</span>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;shapes&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Shapes&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">255</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">254</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;cow2&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Animals&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">255</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;abc&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;ABC&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">128</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">1</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;truck_tanks4&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Things that Go&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">129</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">127</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;numbers1&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Numbers&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">254</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;food&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Food&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">255</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">255</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;colors&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Colors&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">255</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">165</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">0</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;world1&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Around the World&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">108</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">183</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">189</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;random1&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Random&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">165</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">43</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">42</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[[</span><span class="n">Tile</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImage:</span><span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;support&quot;</span><span class="p">]</span> <span class="nl">andTitle:</span><span class="s">@&quot;Support&quot;</span> <span class="nl">andColor:</span><span class="p">[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mi">169</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">green:</span><span class="mi">169</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">blue:</span><span class="mi">169</span><span class="o">/</span><span class="mf">255.0</span> <span class="nl">alpha:</span><span class="mi">1</span><span class="p">]],</span> <span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">tiles</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>And finally I have a the placeTiles method. This is where it all comes together. This method steps trough the
+array and adds the tiles to the view.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ViewController.m [ ]  </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;(</span><span class="kt">void</span><span class="p">)</span><span class="n">placeTiles</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">//button width set to half screen size and height to a third of the screen size</span>
+</span><span class='line'><span class="n">CGRect</span> <span class="n">screenRect</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIScreen</span> <span class="n">mainScreen</span><span class="p">]</span> <span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'><span class="n">CGFloat</span> <span class="n">tileWidth</span> <span class="o">=</span> <span class="n">screenRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="n">CGFloat</span> <span class="n">tileHeight</span> <span class="o">=</span> <span class="n">screenRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">intXSpacing</span> <span class="o">=</span> <span class="n">tileWidth</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">intYSpacing</span> <span class="o">=</span> <span class="n">tileHeight</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">intTagNumber</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">intXTile</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSInteger</span> <span class="n">intYTile</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//get tiles that will represent the button data</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">tileCount</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSArray</span> <span class="o">*</span><span class="n">tiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="n">getTiles</span><span class="p">];</span>
+</span><span class='line'><span class="n">Tile</span> <span class="o">*</span><span class="n">tile</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">kButtonRows</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">kButtonColumns</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">intXTile</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">intXSpacing</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">intYTile</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">intYSpacing</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//get reference to a tile</span>
+</span><span class='line'>        <span class="n">tile</span> <span class="o">=</span> <span class="p">[</span><span class="n">tiles</span> <span class="nl">objectAtIndex:</span><span class="n">tileCount</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//create new button and set its frame with the tileWidth TileHeight and its x and y location</span>
+</span><span class='line'>        <span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="nl">setFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="n">intXTile</span><span class="p">,</span> <span class="n">intYTile</span><span class="p">,</span> <span class="n">tileWidth</span><span class="p">,</span> <span class="n">tileHeight</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//set the button imageView to fit the tile image within the Aspect Ratio then set the image to the tile.tileImage</span>
+</span><span class='line'>         <span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">imageView</span><span class="p">.</span><span class="n">contentMode</span> <span class="o">=</span> <span class="n">UIViewContentModeScaleAspectFit</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="nl">setImage:</span><span class="n">tile</span><span class="p">.</span><span class="n">tileImage</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//add a TouchDown target </span>
+</span><span class='line'>        <span class="p">[</span><span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">actionPick:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchDown</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//</span>
+</span><span class='line'>        <span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">adjustsImageWhenHighlighted</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">adjustsImageWhenDisabled</span> <span class="o">=</span> <span class="n">NO</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//set button Tag</span>
+</span><span class='line'>        <span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="n">intTagNumber</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//set background color</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="n">tile</span><span class="p">.</span><span class="n">tileColor</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//add to view</span>
+</span><span class='line'>         <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">buttons</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//get ready for next iteration- increment tagNumber and tileCount</span>
+</span><span class='line'>         <span class="n">intTagNumber</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">tileCount</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So what have I learned so far? Compared to the MVVM pattern with WP7, off the self without creating your own
+data binding solution in iOS or Android, creating a UI takes a significant amount more code in iOS and Android both. I will keep
+posting as I get further along in the app. Next up will be the creation of the &ldquo;Card deck&rdquo; or gallery.</p>
+
+<p>Also, check out this <a href="http://www.codeproject.com/Articles/166952/MVVM-in-Android">MVVM library</a> for Android. Could bring some MVVM goodness to Android.</p>
+]]></content>
+  </entry>
+  
+</feed>
