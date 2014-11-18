@@ -1,3 +1,8 @@
+# Intellij
+.idea/
+*.iml
+*.iws
+
 Gemfile.lock
 test/dest
 *.gem
