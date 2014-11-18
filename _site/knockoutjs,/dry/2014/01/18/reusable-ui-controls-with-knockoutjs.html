@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+
+  <title>Reusable UI controls with KnockoutJS</title>
+  <meta name="description" content="When developing large applications, it’s best practice to use some level of the DRY principle, and attempt to create reusable modules, components, and code w...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://charlesbking.com/knockoutjs,/dry/2014/01/18/reusable-ui-controls-with-knockoutjs.html">
+  <link rel="alternate" type="application/atom+xml" title="Coding in the basement" href="http://charlesbking.com/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Coding in the basement</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Reusable UI controls with KnockoutJS</h1>
+    <p class="post-meta">Jan 18, 2014</p>
+  </header>
+
+  <article class="post-content">
+    <p>When developing large applications, it’s best practice to use some level of the <a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY</a> principle, and attempt to create reusable modules, components, and code wherever possible. Unfortunately, adhering to this principle with KnockoutJS it not as straight-forward as it could be.</p>
+
+<!-- more -->
+
+<h2 id="the-problem">The problem</h2>
+
+<p>The problem.. well it’s not really a problem, it’s just the way KnockoutJS was designed. KnockoutJS is more of a library for doing <a href="http://en.wikipedia.org/wiki/Model_View_ViewModel">MVVM</a>, than a framework that has opinions on how you re-use your code. There are a few frameworks out there that attempt to solve this issue, and do it very well. </p>
+
+<ul>
+  <li><a href="http://durandaljs.com/">Durandal</a> is a great framework that builds on Knockout to provide things like <a href="http://durandaljs.com/documentation/Creating-A-Module/">modules</a>, <a href="http://durandaljs.com/documentation/Creating-A-View/">views</a> and a router. It is really more comparable to AngularJS or Ember, than to vanilla Knockout.</li>
+  <li><a href="http://stoodder.github.io/falconjs/">Falcon.js</a> Falcon is a relative newcomer, and admittedly  I have not used it, but it introduces Objects, Models and Views to help give Knockout some structure.</li>
+</ul>
+
+<p>However, what if you are already invested in a large vanilla Knockout codebase and don’t want to introduce a new framework? You can use some clever binding handlers.</p>
+
+<h2 id="reusable-binding-handlers">Reusable binding handlers</h2>
+
+<p>Using Knockout’s <a href="http://knockoutjs.com/documentation/custom-bindings.html">bindingHandlers</a> and in-line <a href="http://knockoutjs.com/documentation/template-binding.html">template</a> engine, you can generate reusable UI controls that are fully portable, and can be introduced into any viewmodel.  </p>
+
+<p>To demo this, lets put together a simple hierarchical tree-view, that can be given a set of JSON, display it and track selections. Start with the bindingHandler that is appropriately called <strong>treeView</strong>. </p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">ko</span><span class="p">.</span><span class="nx">bindingHandlers</span><span class="p">.</span><span class="nx">treeView</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">valueAccessor</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">//style element</span>
+          <span class="nx">element</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ko-treeview-container&quot;</span><span class="p">;</span>
+          
+           <span class="c1">//let this handler control its descendants. </span>
+           <span class="k">return</span> <span class="p">{</span> <span class="nx">controlsDescendantBindings</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
+        <span class="p">}</span>
+      <span class="p">};</span></code></pre></div>
+
+<p>In this block, we have the initialize function for the bindingHandler that will run when Knockout binds to the View. The key to making this bindingHandler reusable, is the return value. <strong>controlsDescendantBindings: true</strong> tells Knockout to stop the parent context from trying to bind against this elements children, giving our bindingHandler full control over its bound element. The Knockout <a href="http://knockoutjs.com/documentation/custom-bindings-controlling-descendant-bindings.html">documentation</a> goes over this in more detail. Also, I am adding a CSS class to the bound container at runtime, so it can be controlled with an included stylesheet.</p>
+
+<p>Next lets add some options to the valueAccessor, to build the API that you will use to control the element.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="nx">valueAccessor</span><span class="p">();</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">data</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;ko.bindingHandlers.treeView: No data to display&quot;</span><span class="p">);</span>
+          <span class="p">}</span> 
+          
+          <span class="c1">//extend options with search</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">search</span> <span class="o">=</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+      
+          <span class="c1">//set default data values</span>
+          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">label</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">childNode</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">childNode</span> <span class="o">=</span> <span class="s1">&#39;children&#39;</span><span class="p">;</span></code></pre></div>
+
+<p>We get a reference to the valueAccessor() and add an observable <strong>options.search</strong> to allow the user to filter the view by keyword. Also, we allow the user to pass in the value of the <strong>label</strong> (this will serve as a unique id for the node) for each tree node, and the property <strong>childNode</strong> to specify the object property to search for child nodes. With this we have enough information to build the UI.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">createNodes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rootElement</span><span class="p">,</span> <span class="nx">options</span><span class="p">){</span>
+        
+     <span class="c1">//Root node template containing a list of the top level nodes in the data set</span>
+     <span class="kd">var</span> <span class="nx">rootTmpl</span> <span class="o">=</span> <span class="s1">&#39;&lt;script id=&quot;ko-treeview-root-tmpl&quot;&gt;&lt;div class=&quot;navbar&quot;&gt;&lt;p class=&quot;brand&quot; data-bind=&quot;text:$data.title&quot;&gt;Title&lt;/p&gt;&lt;div class=&quot;container&quot;&gt;&lt;form class=&quot;navbar-form pull-right col-sm-4&quot;&gt;&lt;div class=&quot;input-append&quot;&gt;&lt;input class=&quot;span4&quot; type=&quot;text&quot; placeholder=&quot;Search&quot; data-bind=&quot;value:$data.search, valueUpdate: \&#39;afterkeydown\&#39;&quot;/&gt;&lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-search&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;&lt;ul class=&quot;ko-treeview-list&quot; data-bind=&quot;template:{foreach:$data.data,name:\&#39;ko-treeview-node-tmpl\&#39;}&quot;&gt;&lt;/ul&gt;&lt;/script&gt;&#39;</span><span class="p">;</span>
+     
+     <span class="c1">//the template to display each node, notice the recursive template binding with UL</span>
+     <span class="kd">var</span> <span class="nx">nodeTmpl</span> <span class="o">=</span> <span class="s1">&#39;&lt;script id=&quot;ko-treeview-node-tmpl&quot;&gt;&lt;li class=&quot;ko-treeview-listitem&quot;&gt;&lt;div data-bind=&quot;template:{name:\&#39;ko-treeview-item-tmpl\&#39;,data:$data}&quot;&gt;&lt;/div&gt;&lt;ul class=&quot;ko-treeview-list&quot; data-bind=&quot;template:{name:\&#39;ko-treeview-node-tmpl\&#39;,foreach:$data[$root.childNode]}&quot;&gt;&lt;/div&gt;&lt;/li&gt;&lt;/script&gt;&#39;</span><span class="p">;</span>
+     
+     <span class="c1">//the item inside the node, a checkbox and a label.</span>
+     <span class="kd">var</span> <span class="nx">itemTmpl</span> <span class="o">=</span><span class="s1">&#39;&lt;script id=&quot;ko-treeview-item-tmpl&quot;&gt;&lt;div data-bind=&quot;visible:$data[$root.label].indexOf($root.search()) &gt; -1&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;ko-treeview-cb&quot; data-bind=&quot;checked: $root.selected, attr:{value:$data[$root.label], id:$data[$root.label]}&quot;  /&gt;&lt;label  class=&quot;ko-treeview-label&quot; data-bind=&quot;text:$data[$root.label], attr:{for:$data[$root.label]}&quot;&gt;&lt;/label&gt;&lt;/div&gt;&lt;/script&gt;&#39;</span>
+     
+      <span class="c1">//append templates</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ko-treeview-root-tmpl&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+           <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span> <span class="nx">rootTmpl</span><span class="p">);</span>
+       <span class="p">}</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ko-treeview-node-tmpl&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+           <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span> <span class="nx">nodeTmpl</span><span class="p">);</span>
+       <span class="p">}</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ko-treeview-item-tmpl&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+           <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span> <span class="nx">itemTmpl</span><span class="p">);</span>
+       <span class="p">}</span>
+       
+       <span class="c1">//apply first binding</span>
+       <span class="nx">ko</span><span class="p">.</span><span class="nx">applyBindingsToNode</span><span class="p">(</span><span class="nx">rootElement</span><span class="p">,{</span><span class="nx">template</span><span class="o">:</span><span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s2">&quot;ko-treeview-root-tmpl&quot;</span><span class="p">}},</span><span class="nx">options</span><span class="p">);</span>
+      
+  <span class="p">}</span></code></pre></div>
+
+<p>There is a lot that I just added there, but the heavy lifting of the <strong>createNodes</strong> function is all done by Knockout’s template engine. In this case, the templates are the outer list, each node, and the items in the node. The most important piece for the treeView; is the node template. The node template is recursively generating any child items the node contains.  Finally, we need to apply the template binding to the rootElement using <strong>ko.applyBindingsToNode.</strong> ko.applyBindingsToNode allows us to specify bindings to an element, and the context for those bindings. </p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//create the tree</span>
+         <span class="nx">ko</span><span class="p">.</span><span class="nx">bindingHandlers</span><span class="p">.</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">createNodes</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+         <span class="nx">valueAccessor</span><span class="p">().</span><span class="nx">data</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+          <span class="nx">ko</span><span class="p">.</span><span class="nx">bindingHandlers</span><span class="p">.</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">createNodes</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+        <span class="p">});</span></code></pre></div>
+
+<p>Finally, we can finish up by running the <strong>createNodes</strong> function on init, and subscribing to the data set to refresh the treeView if the data changes. Let’s see the final product.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">ko</span><span class="p">.</span><span class="nx">bindingHandlers</span><span class="p">.</span><span class="nx">treeView</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">createNodes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rootElement</span><span class="p">,</span> <span class="nx">options</span><span class="p">){</span>
+        
+     <span class="c1">//Root node template containing a list of the top level nodes in the data set</span>
+     <span class="kd">var</span> <span class="nx">rootTmpl</span> <span class="o">=</span> <span class="s1">&#39;&lt;script id=&quot;ko-treeview-root-tmpl&quot;&gt;&lt;div class=&quot;navbar&quot;&gt;&lt;p class=&quot;brand&quot; data-bind=&quot;text:$data.title&quot;&gt;Title&lt;/p&gt;&lt;div class=&quot;container&quot;&gt;&lt;form class=&quot;navbar-form pull-right col-sm-4&quot;&gt;&lt;div class=&quot;input-append&quot;&gt;&lt;input class=&quot;span4&quot; type=&quot;text&quot; placeholder=&quot;Search&quot; data-bind=&quot;value:$data.search, valueUpdate: \&#39;afterkeydown\&#39;&quot;/&gt;&lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-search&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;&lt;ul class=&quot;ko-treeview-list&quot; data-bind=&quot;template:{foreach:$data.data,name:\&#39;ko-treeview-node-tmpl\&#39;}&quot;&gt;&lt;/ul&gt;&lt;/script&gt;&#39;</span><span class="p">;</span>
+     
+     <span class="c1">//the template to display each node, notice the recursive template binding with UL</span>
+     <span class="kd">var</span> <span class="nx">nodeTmpl</span> <span class="o">=</span> <span class="s1">&#39;&lt;script id=&quot;ko-treeview-node-tmpl&quot;&gt;&lt;li class=&quot;ko-treeview-listitem&quot;&gt;&lt;div data-bind=&quot;template:{name:\&#39;ko-treeview-item-tmpl\&#39;,data:$data}&quot;&gt;&lt;/div&gt;&lt;ul class=&quot;ko-treeview-list&quot; data-bind=&quot;template:{name:\&#39;ko-treeview-node-tmpl\&#39;,foreach:$data[$root.childNode]}&quot;&gt;&lt;/div&gt;&lt;/li&gt;&lt;/script&gt;&#39;</span><span class="p">;</span>
+     
+     <span class="c1">//the item inside the node, a checkbox and a label.</span>
+     <span class="kd">var</span> <span class="nx">itemTmpl</span> <span class="o">=</span><span class="s1">&#39;&lt;script id=&quot;ko-treeview-item-tmpl&quot;&gt;&lt;div data-bind=&quot;visible:$data[$root.label].indexOf($root.search()) &gt; -1&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;ko-treeview-cb&quot; data-bind=&quot;checked: $root.selected, attr:{value:$data[$root.label], id:$data[$root.label]}&quot;  /&gt;&lt;label  class=&quot;ko-treeview-label&quot; data-bind=&quot;text:$data[$root.label], attr:{for:$data[$root.label]}&quot;&gt;&lt;/label&gt;&lt;/div&gt;&lt;/script&gt;&#39;</span>
+     
+      <span class="c1">//append templates</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ko-treeview-root-tmpl&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+           <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span> <span class="nx">rootTmpl</span><span class="p">);</span>
+       <span class="p">}</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ko-treeview-node-tmpl&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+           <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span> <span class="nx">nodeTmpl</span><span class="p">);</span>
+       <span class="p">}</span>
+       <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ko-treeview-item-tmpl&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+           <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">insertAdjacentHTML</span><span class="p">(</span><span class="s1">&#39;beforeend&#39;</span><span class="p">,</span> <span class="nx">itemTmpl</span><span class="p">);</span>
+       <span class="p">}</span>
+       
+       <span class="c1">//apply first binding</span>
+       <span class="nx">ko</span><span class="p">.</span><span class="nx">applyBindingsToNode</span><span class="p">(</span><span class="nx">rootElement</span><span class="p">,{</span><span class="nx">template</span><span class="o">:</span><span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s2">&quot;ko-treeview-root-tmpl&quot;</span><span class="p">}},</span><span class="nx">options</span><span class="p">);</span>
+      
+  <span class="p">},</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">valueAccessor</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">//style element</span>
+          <span class="nx">element</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;ko-treeview-container&quot;</span><span class="p">;</span>
+          
+          <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="nx">valueAccessor</span><span class="p">();</span>
+          <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">data</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;ko.bindingHandlers.treeView: No data to display&quot;</span><span class="p">);</span>
+          <span class="p">}</span> 
+          
+          <span class="c1">//extend options with search</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">search</span> <span class="o">=</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observable</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+      
+          <span class="c1">//set default data values</span>
+          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">label</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">label</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">childNode</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">childNode</span> <span class="o">=</span> <span class="s1">&#39;children&#39;</span><span class="p">;</span>
+       
+           
+        <span class="c1">//create the tree</span>
+         <span class="nx">ko</span><span class="p">.</span><span class="nx">bindingHandlers</span><span class="p">.</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">createNodes</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+         <span class="nx">valueAccessor</span><span class="p">().</span><span class="nx">data</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">ko</span><span class="p">.</span><span class="nx">bindingHandlers</span><span class="p">.</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">createNodes</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+        <span class="p">});</span>
+                
+          
+          <span class="c1">//let this handler control its descendants. </span>
+          <span class="k">return</span> <span class="p">{</span> <span class="nx">controlsDescendantBindings</span><span class="o">:</span> <span class="kc">true</span> <span class="p">};</span>
+        <span class="p">}</span>
+      <span class="p">};</span></code></pre></div>
+
+<p>Now that we made this bindingHandler reusable, it can be bound to a container element, passed the appropriate data, and it will do the rest (except styling, but that can be addressed in a few different ways). You would use this handler like-</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">data-bind=</span><span class="s">&quot;treeView:{selected:selectedNodes, data:data}&quot;</span><span class="nt">&gt;</span> 
+  <span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">vm</span><span class="p">(){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">selectedNodes</span> <span class="o">=</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observableArray</span><span class="p">([]);</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">ko</span><span class="p">.</span><span class="nx">observableArray</span><span class="p">([</span>
+    <span class="p">{</span>
+     <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 1&quot;</span><span class="p">,</span>
+      <span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+        <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 1-1&quot;</span><span class="p">,</span><span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+          <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 1-1-1&quot;</span><span class="p">,</span><span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+            <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 1-1-1-1&quot;</span><span class="p">}</span>
+          <span class="p">]}</span>
+        <span class="p">]},</span>
+        <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 1-2&quot;</span><span class="p">},</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+         <span class="p">{</span>
+     <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 2&quot;</span><span class="p">,</span>
+      <span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+        <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 2-1&quot;</span><span class="p">,</span><span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+          <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 2-1-1&quot;</span><span class="p">}</span>
+        <span class="p">]},</span>
+        <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="s2">&quot;Level 2-2&quot;</span><span class="p">},</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    
+  <span class="p">]);</span>
+
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">myVM</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">vm</span><span class="p">();</span>    
+<span class="nx">ko</span><span class="p">.</span><span class="nx">applyBindings</span><span class="p">(</span><span class="nx">myVM</span><span class="p">);</span></code></pre></div>
+
+<p>Here is a working <a href="http://jsbin.com/Awipoku/14/edit">JSBin</a> of the finished result. What makes this pattern so nice, is it not only removes the handler behavior from the VM, but also the handlers views and templates from the VM. This results in a nicely modular UI component. </p>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Coding in the basement</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Coding in the basement</li>
+          <li><a href="mailto:bringking@gmail.com">bringking@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/bringking">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">bringking</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/thebringking">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">thebringking</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
