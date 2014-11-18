@@ -4,7 +4,10 @@ layout: default
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
+    <div class="animated-title">
+      <h1 class="main">{{ page.title }}</h1>
+      <h1 class="companion" aria-hidden="true">{{ page.title }}</h1>
+    </div>
     <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
   </header>
 

@@ -1,4 +1,10 @@
 /**
+Web fonts
+**/
+@import url(http://fonts.googleapis.com/css?family=Oxygen:400,300,700);
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200);
+
+/**
  * Reset some basic elements
  */
 body, h1, h2, h3, h4, h5, h6,
@@ -8,6 +14,14 @@ dl, dd, ol, ul, figure {
     padding: 0;
 }
 
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+html,body{
+    padding:0;
+    margin:0;
+}
 
 
 /**
@@ -18,9 +32,24 @@ body {
     font-size: $base-font-size;
     line-height: $base-line-height;
     font-weight: 300;
-    color: $text-color;
-    background-color: $background-color;
+    color: $text-color-dark;
+    background-color: $background-color-dark;
     -webkit-text-size-adjust: 100%;
+    transition:background-color ease 150ms;
+
+    &.day{
+        background-color:$background-color-light;
+        color:$text-color-light;
+    }
+    overflow-x:hidden;
+    //the body should not use a heavy bg image on anything other than a PC
+    @include min-media-query($on-laptop) {
+        &.day {
+            background: url(http://subtlepatterns.com/patterns/white_texture.png);
+        }
+        background: url(http://i.imgur.com/vxma3KT.jpg) center center no-repeat black;
+    }
+
 }
 
 
@@ -35,6 +64,9 @@ ul, ol, dl, figure,
     margin-bottom: $spacing-unit / 2;
 }
 
+h1,h2,h3,h4,h5,h6{
+    font-family: $alternate-heading-font-family;
+}
 
 
 /**
@@ -97,7 +129,7 @@ a {
     }
 
     &:hover {
-        color: $text-color;
+        color: inherit;
         text-decoration: underline;
     }
 }
@@ -158,8 +190,6 @@ pre {
     max-width:         calc(#{$content-width} - (#{$spacing-unit} * 2));
     margin-right: auto;
     margin-left: auto;
-    padding-right: $spacing-unit;
-    padding-left: $spacing-unit;
     @extend %clearfix;
 
     @include media-query($on-laptop) {
@@ -201,4 +231,20 @@ pre {
             fill: $grey-color;
         }
     }
+}
+
+.contrast-toggle{
+    position:fixed;
+    color:rgb(128,134,138);
+    top:25px;
+    right:25px;
+    font-size:18px;
+    will-change:left;
+    transition:left ease 250ms;
+    cursor:pointer;
+
+    &:hover{
+        color:rgb(42,132,149);
+    }
+
 }
