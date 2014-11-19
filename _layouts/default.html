@@ -6,13 +6,15 @@
   <body>
   <i class="nav-toggle fa fa-navicon" onclick="toggle()"></i>
   <i class="contrast-toggle fa fa-adjust" onclick="toggleContrast()"></i>
+
     {% include header.html %}
 
+  <div class="page-content-container">
     <div class="page-content">
-      <div class="wrapper">
-        {{ content }}
+      {{ content }}
       </div>
     </div>
+
 
     <!--{% include footer.html %}-->
 

@@ -49,8 +49,10 @@ ko.applyBindings(vm);
 
 {% endhighlight %}
 
-My main problem with the Knockout way, is that I have to describe my bindable model object in two places now, the view and the Viewmodel. To bring a little simplification to this process, I created a new binding handler to handle the implicit creation for me. 
+My main problem with the Knockout way, is that I have to describe my bindable model object in two places now, the view and the Viewmodel. To bring a little simplification to this process, I created a new binding handler to handle the implicit creation for me.
+
 ##Lazy Model
+
 {% highlight javascript %}
 
 <!-- ko model: {value:'name',target:model} -->

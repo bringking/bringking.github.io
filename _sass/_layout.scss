@@ -240,14 +240,25 @@
 /**
  * Page content
  */
-.page-content {
-  width: 100%;
+.page-content-container {
   padding: 12px;
   padding-right: 55px;
-  @include min-media-query($on-laptop) {
-    margin-left: 75px;
-  }
+  padding-left: 55px;
 
+  @include min-media-query($on-laptop) {
+
+    margin-left: 150px;
+    //padding-right: 162px;
+
+  }
+}
+
+.page-content {
+  font-weight: 200;
+  margin: 0 auto;
+  max-width: 800px;
+  height: 100%;
+  color: inherit;
 }
 
 .page-heading {
@@ -297,7 +308,7 @@
         color: rgb(155, 160, 165);
       }
       &.companion {
-        top:0px;
+        top: 0px;
         position: absolute;
         color: rgb(42, 132, 149);
         -webkit-animation: fade 9s infinite; /* Safari 4+ */
