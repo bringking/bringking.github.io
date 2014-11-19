@@ -233,6 +233,25 @@ pre {
     }
 }
 
+.nav-toggle{
+    position:fixed;
+    color:rgb(128,134,138);
+    top:25px;
+    left:25px;
+    font-size:18px;
+    will-change:left;
+    transition:left ease 250ms;
+    cursor:pointer;
+    z-index:1;
+    &:hover{
+        color:rgb(42,132,149);
+    }
+
+    &.open{
+        left:175px;
+    }
+}
+
 .contrast-toggle{
     position:fixed;
     color:rgb(128,134,138);

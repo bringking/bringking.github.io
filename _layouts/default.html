@@ -4,7 +4,8 @@
   {% include head.html %}
 
   <body>
-
+  <i class="nav-toggle fa fa-navicon" onclick="toggle()"></i>
+  <i class="contrast-toggle fa fa-adjust" onclick="toggleContrast()"></i>
     {% include header.html %}
 
     <div class="page-content">
@@ -16,5 +17,5 @@
     <!--{% include footer.html %}-->
 
   </body>
-
+  {% include site.js.html %}
 </html>
