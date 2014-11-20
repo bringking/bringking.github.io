@@ -261,6 +261,14 @@
   max-width: 800px;
   height: 100%;
   color: inherit;
+  margin-left: -15px;
+  margin-right: -15px;
+  @include min-media-query($on-laptop) {
+
+    margin-left: auto;
+    margin-right: auto;
+
+  }
 }
 
 .page-heading {
