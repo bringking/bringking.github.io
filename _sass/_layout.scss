@@ -2,6 +2,7 @@
  * Site header
  */
 .site-header {
+
   &.open {
     width: 150px;
     .side-nav-list {
@@ -242,8 +243,9 @@
  */
 .page-content-container {
   padding: 12px;
-  padding-right: 55px;
-  padding-left: 55px;
+  padding-top: 65px;
+  padding-right: 45px;
+  padding-left: 45px;
 
   @include min-media-query($on-laptop) {
 
