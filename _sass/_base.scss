@@ -45,9 +45,9 @@ body {
     //the body should not use a heavy bg image on anything other than a PC
     @include min-media-query($on-laptop) {
         &.day {
-            background: url(http://subtlepatterns.com/patterns/white_texture.png);
+            background: url(/images/white_texture.png);
         }
-        background: url(http://i.imgur.com/vxma3KT.jpg) center center no-repeat black;
+        background: url(/images/twinkle_twinkle_@2X.png);
     }
 
 }
