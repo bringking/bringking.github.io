@@ -20,7 +20,7 @@ So in order to run the scan successfully, to run the scan do the following
 
 ## Modify fortify properties file
 
-Open up <Fortify_install_dir>\Core\config\fortify.properties and uncomment the following:
+Open up {Fortify_install_dir}\Core\config\fortify.properties and uncomment the following:
 
 {% highlight yaml %}
            com.fortify.VS.SkipASPPrecompilation=true

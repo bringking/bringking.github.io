@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b953c2af-8388-4e3a-b36a-6090e3add0b4" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown" afterPath="$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="bringking.github.io.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,8 +59,8 @@
       <file leaf-file-name="2015-01-23-run-fortify-on-asp-mvc.markdown" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29504743" vertical-offset="20" max-vertical-offset="1280">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.46364594" vertical-offset="40" max-vertical-offset="1280">
+              <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -788,8 +787,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29504743" vertical-offset="20" max-vertical-offset="1280">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.46364594" vertical-offset="40" max-vertical-offset="1280">
+          <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
           <folding />
         </state>
       </provider>
