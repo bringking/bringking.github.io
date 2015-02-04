@@ -3,20 +3,28 @@ layout: default
 ---
 
 <div class="home">
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-        <h2>{{ post.title }}</h2>
-        <div class="post-excerpt">
-          {{ post.excerpt }}
+    <header class="post-header">
+        <div class="animated-title">
+            <h1 class="main">Blog</h1>
+            <h1 class="companion" aria-hidden="true">Blog</h1>
         </div>
-        <div class="post-link"
-                > <a href="{{ post.url | prepend: site.baseurl }}">Read more >></a></div>
-      </li>
-    {% endfor %}
-  </ul>
+    </header>
+    <ul class="post-list">
+        {% for post in site.posts %}
+        <li>
+            <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+            <h2>{{ post.title }}</h2>
+
+            <div class="post-excerpt">
+                {{ post.excerpt }}
+            </div>
+            <div class="post-link"
+                    ><a href="{{ post.url | prepend: site.baseurl }}">Read more >></a></div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
 </div>
