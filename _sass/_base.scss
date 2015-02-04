@@ -10,49 +10,46 @@ Web fonts
 body, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, hr,
 dl, dd, ol, ul, figure {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 *, *:before, *:after {
-    box-sizing: inherit;
+  box-sizing: inherit;
 }
 
-html,body{
-    padding:0;
-    margin:0;
+html, body {
+  padding: 0;
+  margin: 0;
 }
-
 
 /**
  * Basic styling
  */
 body {
-    font-family: $base-font-family;
-    font-size: $base-font-size;
-    line-height: $base-line-height;
-    font-weight: 300;
-    color: $text-color-dark;
-    background-color: $background-color-dark;
-    -webkit-text-size-adjust: 100%;
-    transition:background-color ease 150ms;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  font-weight: 300;
+  color: $text-color-dark;
+  background-color: $background-color-dark;
+  -webkit-text-size-adjust: 100%;
+  transition: background-color ease 150ms;
 
-    &.day{
-        background-color:$background-color-light;
-        color:$text-color-light;
+  &.day {
+    background-color: $background-color-light;
+    color: $text-color-light;
+  }
+  overflow-x: hidden;
+  //the body should not use a heavy bg image on anything other than a PC
+  @include min-media-query($on-laptop) {
+    &.day {
+      background: url(/images/white_texture.png);
     }
-    overflow-x:hidden;
-    //the body should not use a heavy bg image on anything other than a PC
-    @include min-media-query($on-laptop) {
-        &.day {
-            background: url(/images/white_texture.png);
-        }
-       // background: url(/images/twinkle_twinkle_@2X.png);
-    }
+    // background: url(/images/twinkle_twinkle_@2X.png);
+  }
 
 }
-
-
 
 /**
  * Set `margin-bottom` to maintain vertical rhythm
@@ -61,185 +58,169 @@ h1, h2, h3, h4, h5, h6,
 p, blockquote, pre,
 ul, ol, dl, figure,
 %vertical-rhythm {
-    margin-bottom: $spacing-unit / 2;
+  margin-bottom: $spacing-unit / 2;
 }
 
-h1,h2,h3,h4,h5,h6{
-    font-family: $alternate-heading-font-family;
+h1, h2, h3, h4, h5, h6 {
+  font-family: $alternate-heading-font-family;
 }
-
 
 /**
  * Images
  */
 img {
-    max-width: 100%;
-    vertical-align: middle;
+  max-width: 100%;
+  vertical-align: middle;
 }
-
-
 
 /**
  * Figures
  */
 figure > img {
-    display: block;
+  display: block;
 }
 
 figcaption {
-    font-size: $small-font-size;
+  font-size: $small-font-size;
 }
-
-
 
 /**
  * Lists
  */
 ul, ol {
-    margin-left: $spacing-unit;
+  margin-left: $spacing-unit;
 }
 
 li {
-    > ul,
-    > ol {
-         margin-bottom: 0;
-    }
+  > ul,
+  > ol {
+    margin-bottom: 0;
+  }
 }
-
-
 
 /**
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 300;
+  font-weight: 300;
 }
-
-
 
 /**
  * Links
  */
 a {
-    color: $brand-color;
-    text-decoration: none;
+  color: $brand-color;
+  text-decoration: none;
 
-    &:visited {
-        color: darken($brand-color, 15%);
-    }
+  &:visited {
+    color: darken($brand-color, 15%);
+  }
 
-    &:hover {
-        color: inherit;
-        text-decoration: underline;
-    }
+  &:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
 }
-
-
 
 /**
  * Blockquotes
  */
 blockquote {
-    color: $grey-color;
-    border-left: 4px solid $grey-color-light;
-    padding-left: $spacing-unit / 2;
-    font-size: 18px;
-    letter-spacing: -1px;
-    font-style: italic;
+  color: $grey-color;
+  border-left: 4px solid $grey-color-light;
+  padding-left: $spacing-unit / 2;
+  font-size: 18px;
+  letter-spacing: -1px;
+  font-style: italic;
 
-    > :last-child {
-        margin-bottom: 0;
-    }
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
-
-
 
 /**
  * Code formatting
  */
 pre,
 code {
-    font-size: 15px;
-    border: 1px solid $background-color-dark;
+  font-size: 15px;
+  border: 1px solid $background-color-dark;
 }
 
 code {
-    padding: 1px 5px;
+  padding: 1px 5px;
 }
 
 pre {
-    padding: 8px 12px;
-    overflow-x: scroll;
+  padding: 8px 12px;
+  overflow-x: auto;
 
-    > code {
-        border: 0;
-        padding-right: 0;
-        padding-left: 0;
-    }
+  > code {
+    border: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
 }
-
 
 /**
  * Clearfix
  */
 %clearfix {
 
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 }
-
-
 
 /**
  * Icons
  */
 .icon {
 
-    > svg {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        vertical-align: middle;
+  > svg {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
 
-        path {
-            fill: $grey-color;
-        }
+    path {
+      fill: $grey-color;
     }
+  }
 }
 
-.nav-toggle{
-    position:fixed;
-    color:rgb(128,134,138);
-    top:25px;
-    left:25px;
-    font-size:18px;
-    will-change:left;
-    transition:left ease 250ms;
-    cursor:pointer;
-    &:hover{
-        color:rgb(42,132,149);
-    }
+.nav-toggle {
+  position: fixed;
+  color: rgb(128, 134, 138);
+  top: 25px;
+  left: 25px;
+  font-size: 18px;
+  will-change: left;
+  transition: left ease 250ms;
+  cursor: pointer;
+  &:hover {
+    color: rgb(42, 132, 149);
+  }
 
-    &.open{
-        left:175px;
-    }
+  &.open {
+    left: 175px;
+  }
 }
 
-.contrast-toggle{
-    position:fixed;
-    color:rgb(128,134,138);
-    top:25px;
-    right:25px;
-    font-size:18px;
-    will-change:left;
-    transition:left ease 250ms;
-    cursor:pointer;
+.contrast-toggle {
+  position: fixed;
+  color: rgb(128, 134, 138);
+  top: 25px;
+  right: 25px;
+  font-size: 18px;
+  will-change: left;
+  transition: left ease 250ms;
+  cursor: pointer;
 
-    &:hover{
-        color:rgb(42,132,149);
-    }
+  &:hover {
+    color: rgb(42, 132, 149);
+  }
 
 }
