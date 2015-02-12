@@ -158,7 +158,7 @@ So that is a lot to take in, but in a nutshell, on click this function does the 
 So now we can tie this all together in our render function.
 
 {% highlight javascript %}
-  /**
+    /**
      * Define our default header style
      * @returns {{height: string, backgroundColor: string, cursor: string}}
      */
