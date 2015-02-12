@@ -3,7 +3,8 @@ layout: post
 title: "Reusable UI controls with KnockoutJS"
 date: 2014-01-18 19:39:59 -0700
 comments: true
-categories: knockoutjs, DRY
+category: Programming
+tags: [knockoutjs, DRY]
 ---
 
 

@@ -6,7 +6,8 @@ slug: an-ngmodel-binding-handler-for-knockoutjs
 published: true
 date: 2014-03-09 16:40
 comments: true
-categories: [KnockoutJS,AngularJS,ngModel]
+category: Programming
+tags: [KnockoutJS,AngularJS,ngModel]
 ---
 
 After spending some time building my first production Angular app (which is great), the  **[ngModel](http://docs.angularjs.org/api/ng/directive/ngModel)** directive struck me as being immediately useful, compared to the traditional KnockoutJS workflow. So I replicated some of the behavior with a "lazy model" binding handler.

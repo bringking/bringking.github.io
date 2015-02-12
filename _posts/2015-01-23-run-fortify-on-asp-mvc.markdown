@@ -6,7 +6,8 @@ slug: run-fortify-on-asp-mvc
 published: true
 date: 2015-01-23 11:30
 comments: true
-categories: [ASP.net,Visual Studio 2013,Web Api 2,MVC,Fortify,Static analysis]
+category: Programming
+tags: [ASP.net,Visual Studio 2013,Web Api 2,MVC,Fortify,Static analysis]
 ---
 
 So I was recently asked by en enterprise security team to run some static analysis on our backend ASP.net project. That turned

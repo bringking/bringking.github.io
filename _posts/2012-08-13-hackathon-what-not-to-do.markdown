@@ -3,10 +3,8 @@ layout: post
 title: "hackathon: what not to do"
 date: 2012-08-13 05:57
 comments: true
-categories: 
-- hackathon 
-- lean
-- failure
+category: Programming
+tags: [hackathon,lean,failure]
 ---
 
 So over this past weekend I participated in my first and I believe Tucson's first [hackathon](http://startuptucson.com/hackathon). Overall, it was an awesome 
