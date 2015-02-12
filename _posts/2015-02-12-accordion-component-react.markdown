@@ -42,7 +42,7 @@ render: function() {
 {% endhighlight %}
 
 Now the accordion's responsibilities are to display this content in a list, and track whether each item is expanded or
-collapsed. Pretty straight forward so let's create the React class.
+collapsed. Pretty straight forward, so let's create the React class.
 
 {% highlight javascript %}
 var React = require('react/addons');
