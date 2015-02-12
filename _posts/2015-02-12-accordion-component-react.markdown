@@ -205,14 +205,14 @@ So now we can tie this all together in our render function.
 {% endhighlight %}
 
 The most important part of this function, is the *_this.getAnimatedStyle()* call inside the item map function. This call
-return the inline styles to be applied to the element during an animation. So the meat of the logic here, is to check if
+returns the inline styles to be applied to the element during an animation. So the meat of the logic is to check if
 the element should be animating, and if so, grab the animated style. If not, then just maintain your current height by
 setting *height:"auto"* or *height:"25px"*
 
-So tying it all together, we get something that works like this-
+Tying it all together, we get something that works like this-
 
 ![Accordion](/images/reactAccordion.gif)
 
-So there we have it, an accordion control built in ReactJS. The API for this is still pretty sparse, but the core interaction is there.
+There we have it, an accordion control built in ReactJS. The API for this is still pretty sparse, but the core interaction is there.
 Stay tuned for part 2, and we can add more features. If you want to see the full code for this, you can find
 it [here](https://gist.github.com/bringking/2a2f4469d8c60fe1a347).
