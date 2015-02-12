@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b953c2af-8388-4e3a-b36a-6090e3add0b4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/accordion.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/reactAccordion.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2012-08-13-hackathon-what-not-to-do.markdown" afterPath="$PROJECT_DIR$/_posts/2012-08-13-hackathon-what-not-to-do.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2013-12-15-comeback.markdown" afterPath="$PROJECT_DIR$/_posts/2013-12-15-comeback.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2014-01-18-reusable-ui-controls-with-knockoutjs.markdown" afterPath="$PROJECT_DIR$/_posts/2014-01-18-reusable-ui-controls-with-knockoutjs.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2014-03-09-an-ngmodel-binding-handler-for-knockoutjs.markdown" afterPath="$PROJECT_DIR$/_posts/2014-03-09-an-ngmodel-binding-handler-for-knockoutjs.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown" afterPath="$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_includes/head.html" afterPath="$PROJECT_DIR$/_includes/head.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown" afterPath="$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown" />
     </list>
     <ignored path="bringking.github.io.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -58,8 +49,8 @@
       <file leaf-file-name="2015-02-12-accordion-component-react.markdown" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14678898" vertical-offset="0" max-vertical-offset="4580">
-              <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.78899086" vertical-offset="840" max-vertical-offset="4460">
+              <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -159,12 +150,12 @@
         <option value="$PROJECT_DIR$/_layouts/page.html" />
         <option value="$PROJECT_DIR$/_posts/2015-02-12-accordian-component-react.markdown" />
         <option value="$PROJECT_DIR$/_posts/2015-01-23-run-fortify-on-asp-mvc.markdown" />
-        <option value="$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown" />
         <option value="$PROJECT_DIR$/_posts/2014-03-09-an-ngmodel-binding-handler-for-knockoutjs.markdown" />
         <option value="$PROJECT_DIR$/_posts/2014-01-18-reusable-ui-controls-with-knockoutjs.markdown" />
         <option value="$PROJECT_DIR$/_includes/head.html" />
         <option value="$PROJECT_DIR$/_posts/2012-08-13-hackathon-what-not-to-do.markdown" />
         <option value="$PROJECT_DIR$/_posts/2013-12-15-comeback.markdown" />
+        <option value="$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown" />
       </list>
     </option>
   </component>
@@ -172,8 +163,8 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1864" />
-    <option name="y" value="-65" />
+    <option name="x" value="2218" />
+    <option name="y" value="149" />
     <option name="width" value="1766" />
     <option name="height" value="1221" />
   </component>
@@ -377,7 +368,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1864" y="-65" width="1766" height="1221" extended-state="0" />
+    <frame x="2218" y="149" width="1766" height="1221" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -794,8 +785,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/_posts/2015-02-12-accordion-component-react.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14678898" vertical-offset="0" max-vertical-offset="4580">
-          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.78899086" vertical-offset="840" max-vertical-offset="4460">
+          <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
           <folding />
         </state>
       </provider>

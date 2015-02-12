@@ -71,24 +71,18 @@ a mixin, and add it to the mixins array. Next we can define our initial state.
      * @returns {{itemMap: {}}}
      */
     getInitialState: function() {
-        //create a map of item indexes and their initial states
-        var itemMap = {};
-        this.props.items.forEach(function( i, idx ) {
-            itemMap[idx] = {};
+         //create a map of item indexes and their initial states
+         var itemMap = {};
+         this.props.items.forEach(function( i, idx ) {
+             itemMap[idx] = {
+                 animating: false,
+                 open: idx === 0
+             };
+         });
 
-            if ( idx === 0 ) {
-                itemMap[idx].animating = false;
-                itemMap[idx].open = true;
-                return;
-            }
-
-            itemMap[idx].open = false;
-            itemMap[idx].animating = false;
-        });
-
-        return {
-            itemMap: itemMap
-        }
+         return {
+                 itemMap: itemMap
+         }
 
     },
 {% endhighlight %}
