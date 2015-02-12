@@ -150,7 +150,7 @@ So that is a lot to take in, but in a nutshell, on click this function does the 
 - Gets the height the internal content [Element.scrollHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element.scrollHeight)
 *including* content hidden by overflow
 - Gets the current height of the *not including* the overflow using [Element.clientHeight](https://developer.mozilla.org/en-US/docs/Web/API/Element.clientHeight)
-- Sets the state.itemMap[idx].animating to *true* to indicate that this item is about to be animated
+- Sets the *state.itemMap[idx].animating* to *true* to indicate that this item is about to be animated
 - Calculates the newHeight based on it's current height
 - Triggers the react-animation animation with the new values.
 - On complete, grab the item from the map again, and toggle animation to false, and set the open flag.
