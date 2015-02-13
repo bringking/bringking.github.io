@@ -66,25 +66,27 @@ We know we need to animate the opening and closing of the items, so we need to b
 a mixin, and add it to the mixins array. Next we can define our initial state.
 
 {% highlight javascript %}
-    /**
-     * Get the initial state
-     * @returns {{itemMap: {}}}
-     */
-    getInitialState: function() {
-         //create a map of item indexes and their initial states
-         var itemMap = {};
-         this.props.items.forEach(function( i, idx ) {
-             itemMap[idx] = {
-                 animating: false,
-                 open: idx === 0
-             };
-         });
+/**
+ * Get the initial state
+ * @returns {{itemMap: {}}}
+ */
+getInitialState: function() {
 
-         return {
-                 itemMap: itemMap
-         }
+    //map item indexes and their initial states
+    var itemMap = this.props.items.map(function( i, idx ) {
+        return {
+            animating: false,
+            open: idx === 0,
+            content:i.content,
+            header:i.header
+        };
+    });
 
-    },
+    return {
+        itemMap: itemMap
+    }
+
+},
 {% endhighlight %}
 
 In this naive implementation, we will just assume that every time the component is mounted, the first item in the set
