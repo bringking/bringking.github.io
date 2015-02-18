@@ -44,16 +44,19 @@ body {
     color: $text-color-light;
 
     .controls{
-      background-color: $background-color-light;
+      background: $background-color-light;
     }
+
   }
   overflow-x: hidden;
   //the body should not use a heavy bg image on anything other than a PC
   @include min-media-query($on-laptop) {
     &.day {
       background: url(/images/white_texture.png);
+      .controls{
+        background: none;
+      }
     }
-    // background: url(/images/twinkle_twinkle_@2X.png);
   }
 
 }
