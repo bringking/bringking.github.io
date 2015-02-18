@@ -36,9 +36,16 @@ body {
   -webkit-text-size-adjust: 100%;
   transition: background-color ease 150ms;
 
+  .controls{
+    background-color: $background-color-dark;
+  }
   &.day {
     background-color: $background-color-light;
     color: $text-color-light;
+
+    .controls{
+      background-color: $background-color-light;
+    }
   }
   overflow-x: hidden;
   //the body should not use a heavy bg image on anything other than a PC
@@ -191,36 +198,4 @@ pre {
   }
 }
 
-.nav-toggle {
-  position: fixed;
-  color: rgb(128, 134, 138);
-  top: 25px;
-  left: 25px;
-  font-size: 18px;
-  will-change: left;
-  transition: left ease 250ms;
-  cursor: pointer;
-  &:hover {
-    color: rgb(42, 132, 149);
-  }
 
-  &.open {
-    left: 175px;
-  }
-}
-
-.contrast-toggle {
-  position: fixed;
-  color: rgb(128, 134, 138);
-  top: 25px;
-  right: 25px;
-  font-size: 18px;
-  will-change: left;
-  transition: left ease 250ms;
-  cursor: pointer;
-
-  &:hover {
-    color: rgb(42, 132, 149);
-  }
-
-}
