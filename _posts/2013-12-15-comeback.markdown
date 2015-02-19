@@ -5,6 +5,7 @@ date: 2013-12-15 23:25:17 -0700
 comments: true
 category: Programming
 tags: [blogging,coding,javascript,design,angular,knockout,mv*]
+showMore: false
 ---
 Wow, haven't posted on here in over a year. Well a lot has happened since then, so I thought I would update this post
 to reflect some of the changes that I have been through. First off, I changed the stylesheets around significantly, to match the

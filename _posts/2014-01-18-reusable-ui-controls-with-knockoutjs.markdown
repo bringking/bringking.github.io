@@ -5,6 +5,7 @@ date: 2014-01-18 19:39:59 -0700
 comments: true
 category: Programming
 tags: [knockoutjs, DRY]
+showMore: true
 ---
 
 

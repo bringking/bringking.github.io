@@ -5,6 +5,7 @@ date: 2012-08-13 05:57
 comments: true
 category: Programming
 tags: [hackathon,lean,failure]
+showMore: true
 ---
 
 So over this past weekend I participated in my first and I believe Tucson's first [hackathon](http://startuptucson.com/hackathon). Overall, it was an awesome 

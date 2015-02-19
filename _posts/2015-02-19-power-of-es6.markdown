@@ -1,0 +1,16 @@
+---
+layout: post
+comments: true
+title: "The Power of ES6"
+slug: power-of-es6
+published: true
+date: 2015-02-19 08:44
+comments: true
+category: Programming
+tags: [ES6,Javascript,ES2015]
+showMore: false
+---
+
+I just gave a talk last night about EcmaScript 6 (or ES2015) at our [TucsonJS](http://www.meetup.com/TucsonJS/) meetup. It was
+a fun talk with great participation from the TucsonJS members. The slides can be found [here](http://charlesbking.com/power_of_es6).
+I hope they make you as excited as I am to start using ES6. Enjoy!

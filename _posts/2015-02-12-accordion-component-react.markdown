@@ -8,6 +8,7 @@ date: 2015-02-12 11:30
 comments: true
 category: Programming
 tags: [ReactJS,Components,Javascript,JSX,react-animate]
+showMore: true
 ---
 
 For a new project I am working on, I needed to create an Accordion control using ReactJS. Despite how I feel about the user

@@ -8,6 +8,7 @@ date: 2015-01-23 11:30
 comments: true
 category: Programming
 tags: [ASP.net,Visual Studio 2013,Web Api 2,MVC,Fortify,Static analysis]
+showMore: true
 ---
 
 So I was recently asked by en enterprise security team to run some static analysis on our backend ASP.net project. That turned
