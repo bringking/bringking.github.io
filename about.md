@@ -4,8 +4,8 @@ title: About
 permalink: /about/
 ---
 
-I'm a father, husband, software engineer and an entrepreneur (in order of importance). I live Tucson, AZ and work for an amazing
-consulting firm called [Elegant Thought](http://www.elegantthought.com/). If you need web or mobile work, click the link and contact us.
+I'm a father, husband, software engineer and an entrepreneur (in order of importance). I live Tucson, AZ and I am the president
+ of an engineering consulting firm [Rincon Strategies](http://rinconstrategies.io/). If you need web or mobile work, click the link and contact us.
 
  I love writing code and working on interesting problems. I started off in technology by supporting and creating applications
  for the desktop. Shortly afterwards, I fell in love with mobile and created mobile applications for iOS, Android, and
